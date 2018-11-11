@@ -1,36 +1,183 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Places Search Box</title>
     <style>
-      /* Set the size of the div element that contains the map */
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
       #map {
-        height: 650px;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
-       }
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
     </style>
-    <script src="jquery-3.3.1.min.js"></script>
   </head>
   <body>
-    <h3>奕瑾最可愛</h3>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
     <script>
-      function initMap() {
-        var taiwan = {lat: 23.5, lng: 121};
-        var marker 
-        var map = new google.maps.Map(
-            document.getElementById('map'), {zoom: 7, center: taiwan});
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
 
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      function initAutocomplete() {
+        var taiwan = {lat: 23.5, lng: 121};
+        var marker
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: taiwan,
+          zoom: 7,
+          mapTypeId: 'roadmap'
+        });
         var locations = [{"city":"基隆市","district":"仁愛區","block":"獅球里","road":"獅球路8號(救國團)","full_address":"基隆市仁愛區獅球里獅球路8號(救國團)","lat":25.1248177,"lng":121.7378312},{"city":"基隆市","district":"仁愛區","block":"新店里","road":"孝三路62號(郵局門口)","full_address":"基隆市仁愛區新店里孝三路62號(郵局門口)","lat":25.130428,"lng":121.739696},{"city":"基隆市","district":"仁愛區","block":"智仁里","road":"仁二路133號(信義國小)","full_address":"基隆市仁愛區智仁里仁二路133號(信義國小)","lat":25.1274807,"lng":121.7469015},{"city":"基隆市","district":"仁愛區","block":"崇文里","road":"南榮路20號(郵局門口)","full_address":"基隆市仁愛區崇文里南榮路20號(郵局門口)","lat":25.1257172,"lng":121.7426484},{"city":"基隆市","district":"仁愛區","block":"花崗里","road":"愛九路6號","full_address":"基隆市仁愛區花崗里愛九路6號","lat":25.1276969,"lng":121.752446},{"city":"基隆市","district":"仁愛區","block":"明德里","road":"公園街328號","full_address":"基隆市仁愛區明德里公園街328號","lat":25.1294248,"lng":121.7379987},{"city":"基隆市","district":"仁愛區","block":"和明里","road":"愛五路20號","full_address":"基隆市仁愛區和明里愛五路20號","lat":25.1282052,"lng":121.7455047},{"city":"基隆市","district":"仁愛區","block":"育仁里","road":"南榮路327號","full_address":"基隆市仁愛區育仁里南榮路327號","lat":25.1192979,"lng":121.7436781},{"city":"基隆市","district":"仁愛區","block":"同風里","road":"孝二路39號","full_address":"基隆市仁愛區同風里孝二路39號","lat":25.1289081,"lng":121.7394452},{"city":"基隆市","district":"仁愛區","block":"同風里","road":"忠四路9號","full_address":"基隆市仁愛區同風里忠四路9號","lat":25.1278979,"lng":121.739579},{"city":"基隆市","district":"信義區","block":"禮儀里","road":"東明路75號","full_address":"基隆市信義區禮儀里東明路75號","lat":25.1275939,"lng":121.7619343},{"city":"基隆市","district":"信義區","block":"義幸里","road":"信二路178號(郵局門口)","full_address":"基隆市信義區義幸里信二路178號(郵局門口)","lat":25.1295447,"lng":121.7534923},{"city":"基隆市","district":"信義區","block":"義民里","road":"信二路義民社區","full_address":"基隆市信義區義民里信二路義民社區","lat":25.1291242,"lng":121.7561124},{"city":"基隆市","district":"信義區","block":"信綠里","road":"東信路324號(基隆女中)","full_address":"基隆市信義區信綠里東信路324號(基隆女中)","lat":25.1286878,"lng":121.7590489},{"city":"基隆市","district":"信義區","block":"東信里","road":"東信路123號(郵局門口)","full_address":"基隆市信義區東信里東信路123號(郵局門口)","lat":25.1282127,"lng":121.7638399},{"city":"基隆市","district":"信義區","block":"東光里","road":"崇法街64號(基隆看守所)","full_address":"基隆市信義區東光里崇法街64號(基隆看守所)","lat":25.1294135,"lng":121.764945},{"city":"基隆市","district":"信義區","block":"孝忠里","road":"深美街198號","full_address":"基隆市信義區孝忠里深美街198號","lat":25.1304502,"lng":121.7811122},{"city":"基隆市","district":"信義區","block":"孝忠里","road":"深溪路55巷口","full_address":"基隆市信義區孝忠里深溪路55巷口","lat":25.1304502,"lng":121.7811122},{"city":"基隆市","district":"信義區","block":"仁壽里","road":"信二路268號(衛生福利部基隆醫院)","full_address":"基隆市信義區仁壽里信二路268號(衛生福利部基隆醫院)","lat":25.1303083,"lng":121.7481966},{"city":"基隆市","district":"信義區","block":"仁義里","road":"信二路234號","full_address":"基隆市信義區仁義里信二路234號","lat":25.1297342,"lng":121.7516416},{"city":"基隆市","district":"中正區","block":"碧砂里","road":"環港街5號(環港街魚市場)","full_address":"基隆市中正區碧砂里環港街5號(環港街魚市場)","lat":25.1426536,"lng":121.7915774},{"city":"基隆市","district":"中正區","block":"新豐里","road":"新豐街482號2F(郵局門口)","full_address":"基隆市中正區新豐里新豐街482號2F(郵局門口)","lat":25.1354881,"lng":121.7851793},{"city":"基隆市","district":"中正區","block":"港通里","road":"中正路56號(郵局門口)","full_address":"基隆市中正區港通里中正路56號(郵局門口)","lat":25.1341957,"lng":121.7455897},{"city":"基隆市","district":"中正區","block":"港通里","road":"東六號碼頭","full_address":"基隆市中正區港通里東六號碼頭","lat":25.1385858,"lng":121.7507374},{"city":"基隆市","district":"中正區","block":"港通里","road":"義一路1號(基隆市政府)","full_address":"基隆市中正區港通里義一路1號(基隆市政府)","lat":25.1316449,"lng":121.7445529},{"city":"基隆市","district":"中正區","block":"港通里","road":"義一路80號","full_address":"基隆市中正區港通里義一路80號","lat":25.1336642,"lng":121.7463365},{"city":"基隆市","district":"中正區","block":"真砂里","road":"祥豐街74號","full_address":"基隆市中正區真砂里祥豐街74號","lat":25.1421206,"lng":121.7642287},{"city":"基隆市","district":"中正區","block":"海濱里","road":"北寧路2號(郵局門口)","full_address":"基隆市中正區海濱里北寧路2號(郵局門口)","lat":25.15044,"lng":121.7755731},{"city":"基隆市","district":"中正區","block":"海濱里","road":"北寧路2號(海大男生宿舍)","full_address":"基隆市中正區海濱里北寧路2號(海大男生宿舍)","lat":25.1505806,"lng":121.7760687},{"city":"基隆市","district":"中正區","block":"海濱里","road":"北寧路2號(海大理工學院)","full_address":"基隆市中正區海濱里北寧路2號(海大理工學院)","lat":25.1505806,"lng":121.7760687},{"city":"基隆市","district":"中山區","block":"德和里","road":"復興路204號","full_address":"基隆市中山區德和里復興路204號","lat":25.1459449,"lng":121.7267762},{"city":"基隆市","district":"中山區","block":"德安里","road":"復興路278號","full_address":"基隆市中山區德安里復興路278號","lat":25.148655,"lng":121.725944},{"city":"基隆市","district":"中山區","block":"德安里","road":"復興路336號(經國學院)","full_address":"基隆市中山區德安里復興路336號(經國學院)","lat":25.1497248,"lng":121.7285388},{"city":"基隆市","district":"中山區","block":"居仁里","road":"中華路3號(郵局門口)","full_address":"基隆市中山區居仁里中華路3號(郵局門口)","lat":25.14522,"lng":121.738599},{"city":"基隆市","district":"中山區","block":"和慶里","road":"中和路168巷10弄22號","full_address":"基隆市中山區和慶里中和路168巷10弄22號","lat":25.1504199,"lng":121.7154156},{"city":"基隆市","district":"中山區","block":"和平里","road":"中山三路105號(西17號碼頭)","full_address":"基隆市中山區和平里中山三路105號(西17號碼頭)","lat":25.1403021,"lng":121.7445185},{"city":"基隆市","district":"中山區","block":"西榮里","road":"西定路120號(郵局門口)","full_address":"基隆市中山區西榮里西定路120號(郵局門口)","lat":25.1341334,"lng":121.7350593},{"city":"基隆市","district":"中山區","block":"西康里","road":"復興路38號(郵局門口)","full_address":"基隆市中山區西康里復興路38號(郵局門口)","lat":25.1417827,"lng":121.7268105},{"city":"基隆市","district":"中山區","block":"安民里","road":"新民路19號(郵局門口)","full_address":"基隆市中山區安民里新民路19號(郵局門口)","lat":25.1305537,"lng":121.7363772},{"city":"基隆市","district":"中山區","block":"安平里","road":"中山一路105巷口","full_address":"基隆市中山區安平里中山一路105巷口","lat":25.1322023,"lng":121.7380635},{"city":"基隆市","district":"安樂區","block":"鶯歌里","road":"麥金路127巷8號","full_address":"基隆市安樂區鶯歌里麥金路127巷8號","lat":25.1203533,"lng":121.7212323},{"city":"基隆市","district":"安樂區","block":"鶯歌里","road":"麥金路46號","full_address":"基隆市安樂區鶯歌里麥金路46號","lat":25.1201724,"lng":121.7225534},{"city":"基隆市","district":"安樂區","block":"興寮里","road":"基金一路101號","full_address":"基隆市安樂區興寮里基金一路101號","lat":25.1385117,"lng":121.7184747},{"city":"基隆市","district":"安樂區","block":"長樂里","road":"樂利三街6號","full_address":"基隆市安樂區長樂里樂利三街6號","lat":25.1289079,"lng":121.7190616},{"city":"基隆市","district":"安樂區","block":"定邦里","road":"安一路146號","full_address":"基隆市安樂區定邦里安一路146號","lat":25.132326,"lng":121.733468},{"city":"基隆市","district":"安樂區","block":"壯觀里","road":"樂利二街62巷212號","full_address":"基隆市安樂區壯觀里樂利二街62巷212號","lat":25.1215622,"lng":121.7169803},{"city":"基隆市","district":"安樂區","block":"安樂區","road":"基金一路208巷200號(長庚醫院情人湖院區)","full_address":"基隆市安樂區安樂區基金一路208巷200號(長庚醫院情人湖院區)","lat":25.1489038,"lng":121.7078628},{"city":"基隆市","district":"安樂區","block":"外寮里","road":"基金一路131-24號(郵局門口)","full_address":"基隆市安樂區外寮里基金一路131-24號(郵局門口)","lat":25.1402316,"lng":121.7118286},{"city":"基隆市","district":"安樂區","block":"外寮里","road":"基金一路36號(慈濟)","full_address":"基隆市安樂區外寮里基金一路36號(慈濟)","lat":25.1401648,"lng":121.7144633},{"city":"基隆市","district":"安樂區","block":"六合里","road":"樂利三街261號(郵局門口)","full_address":"基隆市安樂區六合里樂利三街261號(郵局門口)","lat":25.126688,"lng":121.71585},{"city":"基隆市","district":"暖暖區","block":"碇祥里","road":"碇內街247號","full_address":"基隆市暖暖區碇祥里碇內街247號","lat":25.0899986,"lng":121.7528936},{"city":"基隆市","district":"暖暖區","block":"碇安里","road":"源遠路225號(碇內國小)","full_address":"基隆市暖暖區碇安里源遠路225號(碇內國小)","lat":25.0984879,"lng":121.7540088},{"city":"基隆市","district":"暖暖區","block":"碇安里","road":"源遠路341號(郵局門口)","full_address":"基隆市暖暖區碇安里源遠路341號(郵局門口)","lat":25.0995529,"lng":121.7581825},{"city":"基隆市","district":"暖暖區","block":"碇內里","road":"暖碇路24號","full_address":"基隆市暖暖區碇內里暖碇路24號","lat":25.0974126,"lng":121.7519873},{"city":"基隆市","district":"暖暖區","block":"過港里","road":"過港路32號","full_address":"基隆市暖暖區過港里過港路32號","lat":25.104108,"lng":121.7399174},{"city":"基隆市","district":"暖暖區","block":"過港里","road":"過港路58號(郵局門口)","full_address":"基隆市暖暖區過港里過港路58號(郵局門口)","lat":25.1051754,"lng":121.7377734},{"city":"基隆市","district":"暖暖區","block":"暖同里","road":"暖暖街190號(郵局門口)","full_address":"基隆市暖暖區暖同里暖暖街190號(郵局門口)","lat":25.0992628,"lng":121.7355512},{"city":"基隆市","district":"暖暖區","block":"八南里","road":"八堵路142號(八堵火車站)","full_address":"基隆市暖暖區八南里八堵路142號(八堵火車站)","lat":25.1083368,"lng":121.729071},{"city":"基隆市","district":"暖暖區","block":"八南里","road":"源遠路20號(國立基中)","full_address":"基隆市暖暖區八南里源遠路20號(國立基中)","lat":25.1075761,"lng":121.7328491},{"city":"基隆市","district":"暖暖區","block":"八西里","road":"八堵路60號","full_address":"基隆市暖暖區八西里八堵路60號","lat":25.1109545,"lng":121.7348261},{"city":"基隆市","district":"七堵區","block":"實踐里","road":"百三街92號(農會信用部)","full_address":"基隆市七堵區實踐里百三街92號(農會信用部)","lat":25.0817048,"lng":121.6970826},{"city":"基隆市","district":"七堵區","block":"富民里","road":"崇廉街67號","full_address":"基隆市七堵區富民里崇廉街67號","lat":25.099918,"lng":121.715444},{"city":"基隆市","district":"七堵區","block":"堵南里","road":"大德路44號","full_address":"基隆市七堵區堵南里大德路44號","lat":25.0820778,"lng":121.6896746},{"city":"基隆市","district":"七堵區","block":"泰安里","road":"明德二路15號","full_address":"基隆市七堵區泰安里明德二路15號","lat":25.0885476,"lng":121.7058425},{"city":"基隆市","district":"七堵區","block":"泰安里","road":"泰安路36號","full_address":"基隆市七堵區泰安里泰安路36號","lat":25.0880781,"lng":121.7083594},{"city":"基隆市","district":"七堵區","block":"長興里","road":"東新街2號(東新街2號對面)","full_address":"基隆市七堵區長興里東新街2號(東新街2號對面)","lat":25.0931222,"lng":121.7139349},{"city":"基隆市","district":"七堵區","block":"長興里","road":"東新街83號","full_address":"基隆市七堵區長興里東新街83號","lat":25.0943404,"lng":121.7217926},{"city":"基隆市","district":"七堵區","block":"長安里","road":"長安街212巷2-4號","full_address":"基隆市七堵區長安里長安街212巷2-4號","lat":25.0748315,"lng":121.6962122},{"city":"基隆市","district":"七堵區","block":"百福里","road":"百五街93號(郵局門口)","full_address":"基隆市七堵區百福里百五街93號(郵局門口)","lat":25.084236,"lng":121.6980178},{"city":"基隆市","district":"七堵區","block":"百福里","road":"實踐路296號(基隆監理站)","full_address":"基隆市七堵區百福里實踐路296號(基隆監理站)","lat":25.0883787,"lng":121.6962069},{"city":"臺北市","district":"中正區","block":"龍興里","road":"和平西路2段68號(龍口郵局)","full_address":"臺北市中正區龍興里和平西路2段68號(龍口郵局)","lat":25.0290827,"lng":121.5115966},{"city":"臺北市","district":"中正區","block":"龍福里","road":"湖口街1號(國貿局前)","full_address":"臺北市中正區龍福里湖口街1號(國貿局前)","lat":25.0331087,"lng":121.5145797},{"city":"臺北市","district":"中正區","block":"龍福里","road":"羅斯福路1段8號(南門市場)","full_address":"臺北市中正區龍福里羅斯福路1段8號(南門市場)","lat":25.0322107,"lng":121.5183466},{"city":"臺北市","district":"中正區","block":"龍光里","road":"新生南路1段132巷口","full_address":"臺北市中正區龍光里新生南路1段132巷口","lat":25.0370197,"lng":121.5318946},{"city":"臺北市","district":"中正區","block":"錦華里","road":"羅斯福路2段11號(華南銀行)","full_address":"臺北市中正區錦華里羅斯福路2段11號(華南銀行)","lat":25.0286324,"lng":121.5216512},{"city":"臺北市","district":"中正區","block":"螢圃里","road":"廈門街76號(螢橋郵局)","full_address":"臺北市中正區螢圃里廈門街76號(螢橋郵局)","lat":25.024613,"lng":121.5173679},{"city":"臺北市","district":"中正區","block":"黎明里","road":"忠孝西路1段1號(復興橋郵局)","full_address":"臺北市中正區黎明里忠孝西路1段1號(復興橋郵局)","lat":25.046021,"lng":121.5194099},{"city":"臺北市","district":"中正區","block":"黎明里","road":"忠孝西路1段43號(天成飯店,單箱)","full_address":"臺北市中正區黎明里忠孝西路1段43號(天成飯店,單箱)","lat":25.0462086,"lng":121.518262},{"city":"臺北市","district":"中正區","block":"黎明里","road":"忠孝東路1段2號(監察院郵局，鎮江街上)","full_address":"臺北市中正區黎明里忠孝東路1段2號(監察院郵局，鎮江街上)","lat":25.0448038,"lng":121.5213616},{"city":"臺北市","district":"中正區","block":"黎明里","road":"青島西路12號(健保局)","full_address":"臺北市中正區黎明里青島西路12號(健保局)","lat":25.044656,"lng":121.518145},{"city":"臺北市","district":"大同區","block":"鄰江里","road":"重慶北路3段250-4號(重慶北路3段250-4號)","full_address":"臺北市大同區鄰江里重慶北路3段250-4號(重慶北路3段250-4號)","lat":25.071098,"lng":121.513536},{"city":"臺北市","district":"大同區","block":"鄰江里","road":"環河北路2段235巷2號(235巷2號旁空地)","full_address":"臺北市大同區鄰江里環河北路2段235巷2號(235巷2號旁空地)","lat":25.0703366,"lng":121.5098893},{"city":"臺北市","district":"大同區","block":"蓬萊里","road":"承德路3段83號(大同郵局)","full_address":"臺北市大同區蓬萊里承德路3段83號(大同郵局)","lat":25.0658588,"lng":121.5186145},{"city":"臺北市","district":"大同區","block":"楊雅里","road":"重慶北路三段142號","full_address":"臺北市大同區楊雅里重慶北路三段142號","lat":25.067851,"lng":121.513465},{"city":"臺北市","district":"大同區","block":"隆和里","road":"重慶北路三段16號","full_address":"臺北市大同區隆和里重慶北路三段16號","lat":25.0647818,"lng":121.5134195},{"city":"臺北市","district":"大同區","block":"斯文里","road":"承德路3段158號(承德路3段民族西路口)","full_address":"臺北市大同區斯文里承德路3段158號(承德路3段民族西路口)","lat":25.070753,"lng":121.5180979},{"city":"臺北市","district":"大同區","block":"斯文里","road":"昌吉街59號","full_address":"臺北市大同區斯文里昌吉街59號","lat":25.0660059,"lng":121.5150727},{"city":"臺北市","district":"大同區","block":"國順里","road":"延平北路3段130號","full_address":"臺北市大同區國順里延平北路3段130號","lat":25.0677449,"lng":121.5107504},{"city":"臺北市","district":"大同區","block":"重慶里","road":"承德路3段289號(職訓中心)","full_address":"臺北市大同區重慶里承德路3段289號(職訓中心)","lat":25.074526,"lng":121.52018},{"city":"臺北市","district":"大同區","block":"星明里","road":"民生西路162號","full_address":"臺北市大同區星明里民生西路162號","lat":25.057179,"lng":121.517884},{"city":"臺北市","district":"中山區","block":"興亞里","road":"吉林路15號(長安國小門口)","full_address":"臺北市中山區興亞里吉林路15號(長安國小門口)","lat":25.049514,"lng":121.530156},{"city":"臺北市","district":"中山區","block":"興亞里","road":"松江路30號","full_address":"臺北市中山區興亞里松江路30號","lat":25.0472699,"lng":121.5327252},{"city":"臺北市","district":"中山區","block":"興亞里","road":"松江路70號","full_address":"臺北市中山區興亞里松江路70號","lat":25.0493902,"lng":121.5329041},{"city":"臺北市","district":"中山區","block":"興亞里","road":"南京東路二段32號","full_address":"臺北市中山區興亞里南京東路二段32號","lat":25.0518653,"lng":121.5292006},{"city":"臺北市","district":"中山區","block":"興亞里","road":"南京東路二段72號","full_address":"臺北市中山區興亞里南京東路二段72號","lat":25.0518589,"lng":121.5307203},{"city":"臺北市","district":"中山區","block":"劍潭里","road":"北安路305號(海總營區內)","full_address":"臺北市中山區劍潭里北安路305號(海總營區內)","lat":25.078129,"lng":121.537774},{"city":"臺北市","district":"中山區","block":"劍潭里","road":"北安路409號( 國防部郵局)","full_address":"臺北市中山區劍潭里北安路409號( 國防部郵局)","lat":25.079796,"lng":121.5432099},{"city":"臺北市","district":"中山區","block":"聚葉里","road":"中山北路二段113號","full_address":"臺北市中山區聚葉里中山北路二段113號","lat":25.0607349,"lng":121.52322},{"city":"臺北市","district":"中山區","block":"聚盛里","road":"林森北路413號","full_address":"臺北市中山區聚盛里林森北路413號","lat":25.0599458,"lng":121.5257295},{"city":"臺北市","district":"中山區","block":"新洲里","road":"復興北路210號(興安郵局門口)","full_address":"臺北市中山區新洲里復興北路210號(興安郵局門口)","lat":25.056228,"lng":121.543873},{"city":"臺北市","district":"松山區","block":"龍田里","road":"健康路131號(空軍總醫院)","full_address":"臺北市松山區龍田里健康路131號(空軍總醫院)","lat":25.054373,"lng":121.557672},{"city":"臺北市","district":"松山區","block":"精忠里","road":"民生東路四段54號之2號(臺北台塑郵 局(台北118支))","full_address":"臺北市松山區精忠里民生東路四段54號之2號(臺北台塑郵 局(台北118支))","lat":25.057355,"lng":121.5509406},{"city":"臺北市","district":"松山區","block":"精忠里","road":"民生東路四段97號","full_address":"臺北市松山區精忠里民生東路四段97號","lat":25.0579817,"lng":121.5527783},{"city":"臺北市","district":"松山區","block":"精忠里","road":"軍用機場(軍用機場)","full_address":"臺北市松山區精忠里軍用機場(軍用機場)","lat":25.067566,"lng":121.552699},{"city":"臺北市","district":"松山區","block":"新聚里","road":"八德路四段287號","full_address":"臺北市松山區新聚里八德路四段287號","lat":25.0491776,"lng":121.5660534},{"city":"臺北市","district":"松山區","block":"新聚里","road":"八德路四段403號","full_address":"臺北市松山區新聚里八德路四段403號","lat":25.0497049,"lng":121.569266},{"city":"臺北市","district":"松山區","block":"新益里","road":"撫遠街304號(撫遠街富錦街口我家牛排)","full_address":"臺北市松山區新益里撫遠街304號(撫遠街富錦街口我家牛排)","lat":25.0615729,"lng":121.566268},{"city":"臺北市","district":"松山區","block":"新益里","road":"撫遠街與新東街30巷口","full_address":"臺北市松山區新益里撫遠街與新東街30巷口","lat":25.0598649,"lng":121.5679242},{"city":"臺北市","district":"松山區","block":"慈祐里","road":"八德路四段622號(臺北松山郵局 (臺北18支局))","full_address":"臺北市松山區慈祐里八德路四段622號(臺北松山郵局 (臺北18支局))","lat":25.0498579,"lng":121.5741431},{"city":"臺北市","district":"松山區","block":"敦化里","road":"八德路三段10號(台視)","full_address":"臺北市松山區敦化里八德路三段10號(台視)","lat":25.0480816,"lng":121.5504969},{"city":"臺北市","district":"大安區","block":"龍雲里","road":"大安路2段99號(建安國小前)","full_address":"臺北市大安區龍雲里大安路2段99號(建安國小前)","lat":25.0293534,"lng":121.5462276},{"city":"臺北市","district":"大安區","block":"龍雲里","road":"復興南路2段65號","full_address":"臺北市大安區龍雲里復興南路2段65號","lat":25.0305692,"lng":121.5437638},{"city":"臺北市","district":"大安區","block":"龍淵里","road":"辛亥路2段195號","full_address":"臺北市大安區龍淵里辛亥路2段195號","lat":25.0216705,"lng":121.5419848},{"city":"臺北市","district":"大安區","block":"龍淵里","road":"和平東路2段114號(大拇指早餐店前)","full_address":"臺北市大安區龍淵里和平東路2段114號(大拇指早餐店前)","lat":25.024757,"lng":121.542611},{"city":"臺北市","district":"大安區","block":"龍淵里","road":"復興南路2段362號(長興小舖前)","full_address":"臺北市大安區龍淵里復興南路2段362號(長興小舖前)","lat":25.021835,"lng":121.543174},{"city":"臺北市","district":"大安區","block":"龍陣里","road":"和平東路2段175巷32號","full_address":"臺北市大安區龍陣里和平東路2段175巷32號","lat":25.0267642,"lng":121.5417253},{"city":"臺北市","district":"大安區","block":"龍陣里","road":"復興南路2段140號(福客多超商前)","full_address":"臺北市大安區龍陣里復興南路2段140號(福客多超商前)","lat":25.0288986,"lng":121.5432821},{"city":"臺北市","district":"大安區","block":"龍泉里","road":"雲和街93號","full_address":"臺北市大安區龍泉里雲和街93號","lat":25.0233329,"lng":121.531134},{"city":"臺北市","district":"大安區","block":"龍門里","road":"和平東路2段24號(台北靈糧堂前)","full_address":"臺北市大安區龍門里和平東路2段24號(台北靈糧堂前)","lat":25.0255759,"lng":121.536476},{"city":"臺北市","district":"大安區","block":"龍門里","road":"建國南路2段298號","full_address":"臺北市大安區龍門里建國南路2段298號","lat":25.0244,"lng":121.53706},{"city":"臺北市","district":"萬華區","block":"雙園里","road":"莒光路282號","full_address":"臺北市萬華區雙園里莒光路282號","lat":25.0312497,"lng":121.4987313},{"city":"臺北市","district":"萬華區","block":"錦德里","road":"西園路2段263號","full_address":"臺北市萬華區錦德里西園路2段263號","lat":25.025714,"lng":121.4925885},{"city":"臺北市","district":"萬華區","block":"錦德里","road":"西園路2段281巷32號(德昌街272巷西園路2段281)","full_address":"臺北市萬華區錦德里西園路2段281巷32號(德昌街272巷西園路2段281)","lat":25.0234234,"lng":121.4926641},{"city":"臺北市","district":"萬華區","block":"興德里","road":"萬大路423巷34號","full_address":"臺北市萬華區興德里萬大路423巷34號","lat":25.02114,"lng":121.4998266},{"city":"臺北市","district":"萬華區","block":"興德里","road":"萬大路497號","full_address":"臺北市萬華區興德里萬大路497號","lat":25.0199129,"lng":121.497807},{"city":"臺北市","district":"萬華區","block":"興德里","road":"萬大路531號","full_address":"臺北市萬華區興德里萬大路531號","lat":25.018203,"lng":121.497329},{"city":"臺北市","district":"萬華區","block":"糖蔀里","road":"大理街西園路口(公園旁)","full_address":"臺北市萬華區糖蔀里大理街西園路口(公園旁)","lat":25.0332027,"lng":121.4950648},{"city":"臺北市","district":"萬華區","block":"糖蔀里","road":"和平西路3段180號","full_address":"臺北市萬華區糖蔀里和平西路3段180號","lat":25.0351901,"lng":121.4976185},{"city":"臺北市","district":"萬華區","block":"銘德里","road":"長泰街282巷1號","full_address":"臺北市萬華區銘德里長泰街282巷1號","lat":25.021371,"lng":121.493648},{"city":"臺北市","district":"萬華區","block":"綠提里","road":"長順街2號(大理高中，長順街環河南路2段口)","full_address":"臺北市萬華區綠提里長順街2號(大理高中，長順街環河南路2段口)","lat":25.0308614,"lng":121.4912045},{"city":"臺北市","district":"信義區","block":"雙和里","road":"吳興街284巷24弄19號(社區巷口)","full_address":"臺北市信義區雙和里吳興街284巷24弄19號(社區巷口)","lat":25.0242953,"lng":121.5631423},{"city":"臺北市","district":"信義區","block":"興雅里","road":"基隆路一段169號(聯合世紀(A))","full_address":"臺北市信義區興雅里基隆路一段169號(聯合世紀(A))","lat":25.0417019,"lng":121.5652637},{"city":"臺北市","district":"信義區","block":"興隆里","road":"仁愛路四段505號(國父紀念館)","full_address":"臺北市信義區興隆里仁愛路四段505號(國父紀念館)","lat":25.0400306,"lng":121.5602452},{"city":"臺北市","district":"信義區","block":"興隆里","road":"逸仙路46號(逸仙路46號(80支局))","full_address":"臺北市信義區興隆里逸仙路46號(逸仙路46號(80支局))","lat":25.0403465,"lng":121.5616608},{"city":"臺北市","district":"信義區","block":"廣居里","road":"忠孝東路五段222號(退除役官兵輔導委員會)","full_address":"臺北市信義區廣居里忠孝東路五段222號(退除役官兵輔導委員會)","lat":25.0406869,"lng":121.571517},{"city":"臺北市","district":"信義區","block":"廣居里","road":"忠孝東路五段466號(99支局)","full_address":"臺北市信義區廣居里忠孝東路五段466號(99支局)","lat":25.040661,"lng":121.576702},{"city":"臺北市","district":"信義區","block":"新仁里","road":"忠孝東路4段555號(聯合報)","full_address":"臺北市信義區新仁里忠孝東路4段555號(聯合報)","lat":25.0416863,"lng":121.5629562},{"city":"臺北市","district":"信義區","block":"雅祥里","road":"基隆路1段35巷7弄1-4號(中華職訓中心)","full_address":"臺北市信義區雅祥里基隆路1段35巷7弄1-4號(中華職訓中心)","lat":25.0488194,"lng":121.570509},{"city":"臺北市","district":"信義區","block":"景聯里","road":"基隆路二段41號(玉山銀行)","full_address":"臺北市信義區景聯里基隆路二段41號(玉山銀行)","lat":25.031099,"lng":121.5586669},{"city":"臺北市","district":"信義區","block":"景聯里","road":"莊敬路196號(板信銀行)","full_address":"臺北市信義區景聯里莊敬路196號(板信銀行)","lat":25.030542,"lng":121.5613529},{"city":"臺北市","district":"士林區","block":"蘭雅里","road":"中山北路六段191號","full_address":"臺北市士林區蘭雅里中山北路六段191號","lat":25.1077502,"lng":121.524935},{"city":"臺北市","district":"士林區","block":"蘭雅里","road":"中山北路六段337號","full_address":"臺北市士林區蘭雅里中山北路六段337號","lat":25.1115996,"lng":121.525858},{"city":"臺北市","district":"士林區","block":"蘭雅里","road":"中山北路六段53號","full_address":"臺北市士林區蘭雅里中山北路六段53號","lat":25.104222,"lng":121.5246082},{"city":"臺北市","district":"士林區","block":"蘭雅里","road":"德行東路190巷90號(公園邊)","full_address":"臺北市士林區蘭雅里德行東路190巷90號(公園邊)","lat":25.1086568,"lng":121.5310551},{"city":"臺北市","district":"士林區","block":"舊街里","road":"中山北路五段697號","full_address":"臺北市士林區舊街里中山北路五段697號","lat":25.0975601,"lng":121.527206},{"city":"臺北市","district":"士林區","block":"舊街里","road":"中正路214號","full_address":"臺北市士林區舊街里中正路214號","lat":25.095571,"lng":121.5262405},{"city":"臺北市","district":"士林區","block":"臨溪里","road":"至善路2段264號","full_address":"臺北市士林區臨溪里至善路2段264號","lat":25.100437,"lng":121.550925},{"city":"臺北市","district":"士林區","block":"臨溪里","road":"至善路二段360號(至善國中)","full_address":"臺北市士林區臨溪里至善路二段360號(至善國中)","lat":25.1035869,"lng":121.5554252},{"city":"臺北市","district":"士林區","block":"德華里","road":"文林路661巷對面","full_address":"臺北市士林區德華里文林路661巷對面","lat":25.0960495,"lng":121.5225649},{"city":"臺北市","district":"士林區","block":"德華里","road":"文林路731號","full_address":"臺北市士林區德華里文林路731號","lat":25.1023481,"lng":121.5195897},{"city":"臺北市","district":"北投區","block":"關渡里","road":"知行路212號(關渡國中前面)","full_address":"臺北市北投區關渡里知行路212號(關渡國中前面)","lat":25.120112,"lng":121.467174},{"city":"臺北市","district":"北投區","block":"關渡里","road":"知行路239巷9弄11號(關渡郵局前面)","full_address":"臺北市北投區關渡里知行路239巷9弄11號(關渡郵局前面)","lat":25.121545,"lng":121.4668739},{"city":"臺北市","district":"北投區","block":"關渡里","road":"知行路75號","full_address":"臺北市北投區關渡里知行路75號","lat":25.1188329,"lng":121.466133},{"city":"臺北市","district":"北投區","block":"關渡里","road":"關渡路60號(關渡自然公園對面)","full_address":"臺北市北投區關渡里關渡路60號(關渡自然公園對面)","lat":25.1188989,"lng":121.4707983},{"city":"臺北市","district":"北投區","block":"豐年里","road":"中央北路二段245號","full_address":"臺北市北投區豐年里中央北路二段245號","lat":25.138358,"lng":121.491428},{"city":"臺北市","district":"北投區","block":"豐年里","road":"中央北路二段329號(豐年郵局前面)","full_address":"臺北市北投區豐年里中央北路二段329號(豐年郵局前面)","lat":25.138324,"lng":121.489255},{"city":"臺北市","district":"北投區","block":"稻香里","road":"稻香路81號(稻香超市前)","full_address":"臺北市北投區稻香里稻香路81號(稻香超市前)","lat":25.140952,"lng":121.4895379},{"city":"臺北市","district":"北投區","block":"福興里","road":"自強街5巷67號","full_address":"臺北市北投區福興里自強街5巷67號","lat":25.1111432,"lng":121.5118809},{"city":"臺北市","district":"北投區","block":"榮華里","road":"明德路152號","full_address":"臺北市北投區榮華里明德路152號","lat":25.1106844,"lng":121.5209483},{"city":"臺北市","district":"北投區","block":"榮華里","road":"明德路210號(明德郵局前)","full_address":"臺北市北投區榮華里明德路210號(明德郵局前)","lat":25.113279,"lng":121.522171},{"city":"臺北市","district":"內湖區","block":"麗山里","road":"內湖路1段411巷10號","full_address":"臺北市內湖區麗山里內湖路1段411巷10號","lat":25.0824808,"lng":121.571028},{"city":"臺北市","district":"內湖區","block":"麗山里","road":"內湖路一段435號","full_address":"臺北市內湖區麗山里內湖路一段435號","lat":25.0814315,"lng":121.571921},{"city":"臺北市","district":"內湖區","block":"麗山里","road":"內湖路一段629巷42號(麗山國中旁)","full_address":"臺北市內湖區麗山里內湖路一段629巷42號(麗山國中旁)","lat":25.0816165,"lng":121.5756877},{"city":"臺北市","district":"內湖區","block":"樂康里","road":"康樂街131號(東湖國中)","full_address":"臺北市內湖區樂康里康樂街131號(東湖國中)","lat":25.0721649,"lng":121.6194218},{"city":"臺北市","district":"內湖區","block":"葫洲里","road":"康寧路三段22之1號(台北159支局 郵局門口)","full_address":"臺北市內湖區葫洲里康寧路三段22之1號(台北159支局 郵局門口)","lat":25.0722646,"lng":121.6077693},{"city":"臺北市","district":"內湖區","block":"瑞陽里","road":"文德路26號(151支局門口)","full_address":"臺北市內湖區瑞陽里文德路26號(151支局門口)","lat":25.0782557,"lng":121.5797027},{"city":"臺北市","district":"內湖區","block":"瑞光里","road":"瑞光路243號","full_address":"臺北市內湖區瑞光里瑞光路243號","lat":25.0746459,"lng":121.578252},{"city":"臺北市","district":"內湖區","block":"週美里","road":"新明路380巷4弄4號(150支局門口)","full_address":"臺北市內湖區週美里新明路380巷4弄4號(150支局門口)","lat":25.0551068,"lng":121.5800544},{"city":"臺北市","district":"內湖區","block":"紫雲里","road":"康寧路1段139號","full_address":"臺北市內湖區紫雲里康寧路1段139號","lat":25.0794064,"lng":121.5940031},{"city":"臺北市","district":"內湖區","block":"紫陽里","road":"文德路143號","full_address":"臺北市內湖區紫陽里文德路143號","lat":25.0787707,"lng":121.5843843},{"city":"臺北市","district":"南港區","block":"舊庄里","road":"舊庄街1段213號(舊庄派出所)","full_address":"臺北市南港區舊庄里舊庄街1段213號(舊庄派出所)","lat":25.0384681,"lng":121.6225949},{"city":"臺北市","district":"南港區","block":"萬福里","road":"同德路85巷2號(同德郵局)","full_address":"臺北市南港區萬福里同德路85巷2號(同德郵局)","lat":25.0462239,"lng":121.58566},{"city":"臺北市","district":"南港區","block":"萬福里","road":"忠孝東路5段994號(後山埤郵局)","full_address":"臺北市南港區萬福里忠孝東路5段994號(後山埤郵局)","lat":25.0448689,"lng":121.5826879},{"city":"臺北市","district":"南港區","block":"新富里","road":"研究院路1段44號(富康郵局)","full_address":"臺北市南港區新富里研究院路1段44號(富康郵局)","lat":25.0534754,"lng":121.6161978},{"city":"臺北市","district":"南港區","block":"新光里","road":"忠孝東路6段360號(聯勤福利站左側)","full_address":"臺北市南港區新光里忠孝東路6段360號(聯勤福利站左側)","lat":25.0496,"lng":121.591483},{"city":"臺北市","district":"南港區","block":"新光里","road":"忠孝東路6段400號(昆陽郵局)","full_address":"臺北市南港區新光里忠孝東路6段400號(昆陽郵局)","lat":25.049868,"lng":121.592612},{"city":"臺北市","district":"南港區","block":"新光里","road":"昆陽街157巷口(衛生褔利部側門前)","full_address":"臺北市南港區新光里昆陽街157巷口(衛生褔利部側門前)","lat":25.0489473,"lng":121.5946709},{"city":"臺北市","district":"南港區","block":"東新里","road":"重陽路199巷10號","full_address":"臺北市南港區東新里重陽路199巷10號","lat":25.0575601,"lng":121.5991484},{"city":"臺北市","district":"南港區","block":"東新里","road":"重陽路218號右側","full_address":"臺北市南港區東新里重陽路218號右側","lat":25.0575882,"lng":121.6032163},{"city":"臺北市","district":"南港區","block":"東新里","road":"重陽路39巷口","full_address":"臺北市南港區東新里重陽路39巷口","lat":25.0560315,"lng":121.5953548},{"city":"臺北市","district":"文山區","block":"興豐里","road":"興隆路1段235號","full_address":"臺北市文山區興豐里興隆路1段235號","lat":24.9988076,"lng":121.5451412},{"city":"臺北市","district":"文山區","block":"興豐里","road":"興隆路2段97號","full_address":"臺北市文山區興豐里興隆路2段97號","lat":24.9997133,"lng":121.5474559},{"city":"臺北市","district":"文山區","block":"興福里","road":"景興街101號","full_address":"臺北市文山區興福里景興街101號","lat":24.9962181,"lng":121.5484713},{"city":"臺北市","district":"文山區","block":"興福里","road":"興順街185號(興順街185號)","full_address":"臺北市文山區興福里興順街185號(興順街185號)","lat":25.001716,"lng":121.5461304},{"city":"臺北市","district":"文山區","block":"興業里","road":"辛亥路5段102號","full_address":"臺北市文山區興業里辛亥路5段102號","lat":24.9981275,"lng":121.5526867},{"city":"臺北市","district":"文山區","block":"興業里","road":"興隆路2段154巷11號(公園)","full_address":"臺北市文山區興業里興隆路2段154巷11號(公園)","lat":25.0008799,"lng":121.5516605},{"city":"臺北市","district":"文山區","block":"興業里","road":"興隆路2段171號","full_address":"臺北市文山區興業里興隆路2段171號","lat":25.0007152,"lng":121.5489768},{"city":"臺北市","district":"文山區","block":"興得里","road":"興隆路3段108號","full_address":"臺北市文山區興得里興隆路3段108號","lat":24.9992787,"lng":121.5573238},{"city":"臺北市","district":"文山區","block":"興得里","road":"興隆路3段178號","full_address":"臺北市文山區興得里興隆路3段178號","lat":24.9981076,"lng":121.5586064},{"city":"臺北市","district":"文山區","block":"興得里","road":"興隆路3段56號(中國科技大學)","full_address":"臺北市文山區興得里興隆路3段56號(中國科技大學)","lat":24.9991431,"lng":121.5553747}];
-        for (i = 0; i < locations.length; i++) {  
+        for (i = 0; i < locations.length; i++) {
           marker = new google.maps.Marker({
               position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
               map: map
           });
         }
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
       }
+
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANrwP97rB6-tun03pB8yY3NPd3di2BRTI&callback=initMap">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANrwP97rB6-tun03pB8yY3NPd3di2BRTI&libraries=places&callback=initAutocomplete"
+         async defer></script>
+    <script src="jquery-3.3.1.min.js"></script>
   </body>
 </html>
