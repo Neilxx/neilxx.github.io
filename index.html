@@ -67741,9 +67741,20 @@
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "locations" array.
         // The map() method here has nothing to do with the Google Maps API.
+        var image = {
+          url: 'public/postbox.svg',
+          // This marker is 20 pixels wide by 32 pixels high.
+          scaledSize: new google.maps.Size(50, 50),
+          // The origin for this image is (0, 0).
+          origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new google.maps.Point(0, 32)
+        };
+
         var post_markers = locations.map(function(location, i) {
           return new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"])
+            position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
+            icon: image
           });
         });
 
