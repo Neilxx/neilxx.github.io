@@ -67751,23 +67751,45 @@
           anchor: new google.maps.Point(0, 32)
         };
 
-        var post_markers = locations.map(function(location, i) {
-          return new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
-            icon: image
+        // var post_markers = locations.map(function(location, i) {
+
+        //   return new google.maps.Marker({
+        //     position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
+        //     icon: image,
+        //     title: location[i]["postbox_type"]
+        //   });
+        // });
+        var post_markers = [];
+        function bindInfoWindow(marker, map, infowindow, html) {
+          marker.addListener('click', function() {
+            infowindow.open(map, this);
+            infowindow.setContent(html);
           });
-        });
+        }
+
+        for (i = 0; i < locations.length; i++) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
+            map: map,
+            icon: image,
+            title: locations[i]["postbox_type"]
+          });
+          post_markers.push(marker);
+          var infowindow = new google.maps.InfoWindow();
+          var contentString =  '<h4>'+ locations[i]["postbox_type"] + '</h4><p>'+ locations[i]["full_address"] +'</p>';
+          bindInfoWindow(marker, map, infowindow, contentString);
+          // var infowindow = new google.maps.InfoWindow({
+          //   content: contentString
+          // });
+          // marker.addListener('click', function() {
+          //   infowindow.open(map, marker);
+          // });
+        }
 
         // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, post_markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-        // for (i = 0; i < locations.length; i++) {
-        //   marker = new google.maps.Marker({
-        //       position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
-        //       map: map
-        //   });
-        // }
         // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
