@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="description" content="想知道郵筒在哪？ 透過地圖搜尋離你最近的郵筒地點！">
-    <meta name="keywords" content="台灣郵筒位置地圖">
+    <meta name="description" content="想知道郵筒在哪？ 透過地圖搜尋離你最近的郵筒地點！全台灣5635個郵筒的位置都在這">
+    <meta name="keywords" content="全台灣郵筒位置地圖">
     <meta name="google-site-verification" content="v9MKqidJncD5bdENzNI0yEDZkwCh3VJr5BW0cTRcCgQ" />
     <meta name="msvalidate.01" content="A81048F864056777A8E0E640649B3ECC" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Places Search Box</title>
+    <title>全台灣郵筒位置地圖</title>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -74,6 +74,8 @@
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
         width: 400px;
+        top: 10px !important;
+        height: 40px;
       }
 
       #pac-input:focus {
@@ -93,7 +95,7 @@
     </style>
   </head>
   <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
     <div id="map"></div>
     <script>
       // This example adds a search box to a map, using the Google Place Autocomplete
