@@ -9,12 +9,9 @@
     <meta charset="utf-8">
     <title>全台灣郵筒位置地圖</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
       #map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
@@ -95,17 +92,10 @@
     </style>
   </head>
   <body>
+    <h1>全台灣郵筒位置地圖</h1>
     <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
     <div id="map"></div>
     <script>
-      // This example adds a search box to a map, using the Google Place Autocomplete
-      // feature. People can enter geographical searches. The search box will return a
-      // pick list containing a mix of places and predicted search terms.
-
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
       function initAutocomplete() {
         var taiwan = {lat: 23.5, lng: 121};
         var marker
@@ -67737,28 +67727,13 @@
           }
         ]
 
-        // Add some markers to the map.
-        // Note: The code uses the JavaScript Array.prototype.map() method to
-        // create an array of markers based on a given "locations" array.
-        // The map() method here has nothing to do with the Google Maps API.
         var image = {
           url: 'public/postbox.svg',
-          // This marker is 20 pixels wide by 32 pixels high.
           scaledSize: new google.maps.Size(50, 50),
-          // The origin for this image is (0, 0).
           origin: new google.maps.Point(0, 0),
-          // The anchor for this image is the base of the flagpole at (0, 32).
           anchor: new google.maps.Point(0, 32)
         };
 
-        // var post_markers = locations.map(function(location, i) {
-
-        //   return new google.maps.Marker({
-        //     position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
-        //     icon: image,
-        //     title: location[i]["postbox_type"]
-        //   });
-        // });
         var post_markers = [];
         function bindInfoWindow(marker, map, infowindow, html) {
           marker.addListener('click', function() {
@@ -67778,31 +67753,20 @@
           var infowindow = new google.maps.InfoWindow();
           var contentString =  '<h4>'+ locations[i]["postbox_type"] + '</h4><p>'+ locations[i]["full_address"] +'</p>';
           bindInfoWindow(marker, map, infowindow, contentString);
-          // var infowindow = new google.maps.InfoWindow({
-          //   content: contentString
-          // });
-          // marker.addListener('click', function() {
-          //   infowindow.open(map, marker);
-          // });
         }
 
-        // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, post_markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-        // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        // Bias the SearchBox results towards current map's viewport.
         map.addListener('bounds_changed', function() {
           searchBox.setBounds(map.getBounds());
         });
 
         var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
         searchBox.addListener('places_changed', function() {
           var places = searchBox.getPlaces();
 
@@ -67810,13 +67774,11 @@
             return;
           }
 
-          // Clear out the old markers.
           markers.forEach(function(marker) {
             marker.setMap(null);
           });
           markers = [];
 
-          // For each place, get the icon, name and location.
           var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
             if (!place.geometry) {
@@ -67831,7 +67793,6 @@
               scaledSize: new google.maps.Size(25, 25)
             };
 
-            // Create a marker for each place.
             markers.push(new google.maps.Marker({
               map: map,
               icon: icon,
@@ -67840,7 +67801,6 @@
             }));
 
             if (place.geometry.viewport) {
-              // Only geocodes have viewport.
               bounds.union(place.geometry.viewport);
             } else {
               bounds.extend(place.geometry.location);
