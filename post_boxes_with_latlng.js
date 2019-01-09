@@ -1,4 +1,4 @@
-[
+var locations = [
   {
     "city": "基隆市",
     "district": "仁愛區",
