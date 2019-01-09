@@ -160,6 +160,7 @@
           markers.forEach(function(marker) {
             marker.setMap(null);
           });
+
           markers = [];
 
           var bounds = new google.maps.LatLngBounds();
@@ -191,6 +192,23 @@
           });
           map.fitBounds(bounds);
         });
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map
+                });
+                map.setZoom(17);
+                map.setCenter(pos);
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            alert("未允許或遭遇錯誤！");
+        }
       }
 
     </script>
