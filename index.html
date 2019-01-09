@@ -100,20 +100,34 @@
         margin: 8px;
       }
       #github-img {
-        padding: 15px;
+        padding: 15px 0px 15px 70px;
+      }
+      #fb-container {
+        padding-top: 18px;
       }
     </style>
 
   </head>
   <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v3.2&appId=334263470276709&autoLogAppEvents=1';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <div class="row">
       <div class="col-md-6">
         <h1 id="web-title">全台灣郵筒位置地圖</h1>
       </div>
-      <div class="col-md-2 offset-md-4" id="github-img">
+      <div class="col-md-1 offset-md-3" id="github-img">
         <a href="https://github.com/Neilxx/neilxx.github.io" target="_blank">
           <img src="public/GitHub-Mark-120px-plus.png" alt="Github Image" width="32px" height="32px">
         </a>
+      </div>
+      <div class="col-md-2" id="fb-container">
+        <div class="fb-like" data-href="https://neilxx.github.io/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
       </div>
     </div>
 
