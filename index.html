@@ -110,7 +110,7 @@
         width: 345px;
       }
       #web-title {
-        padding-left: 30px;
+        padding-left: 80px;
         margin: 8px;
       }
       #img-container {
@@ -122,6 +122,10 @@
       }
       #fb-container {
         padding-top: 18px;
+      }
+      #fb-comments {
+        margin: 30px auto;
+        display: table;
       }
     </style>
 
@@ -152,7 +156,9 @@
 
     <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
     <div id="map"></div>
-    <div id="fb-comments" class="fb-comments" data-href="https://neilxx.github.io/" data-numposts="5"></div>
+    <div>
+      <div id="fb-comments" class="fb-comments" data-href="https://neilxx.github.io/" data-numposts="5"></div>
+    </div>
     <script>
       function initAutocomplete() {
         var taiwan = {lat: 23.5, lng: 121};
