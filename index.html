@@ -124,7 +124,7 @@
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v3.2&appId=334263470276709&autoLogAppEvents=1';
+      js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v3.2&appId=2193486204246726&autoLogAppEvents=1';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
     <div class="row">
@@ -143,6 +143,7 @@
 
     <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
     <div id="map"></div>
+    <div id="fb-comments" class="fb-comments" data-href="https://neilxx.github.io/" data-numposts="5"></div>
     <script>
       function initAutocomplete() {
         var taiwan = {lat: 23.5, lng: 121};
