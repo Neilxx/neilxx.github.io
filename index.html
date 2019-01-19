@@ -91,7 +91,7 @@
         margin-left: 12px;
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
-        width: 400px;
+        width: 50%;
         top: 10px !important;
         height: 40px;
       }
@@ -110,10 +110,6 @@
       #target {
         width: 345px;
       }
-      #web-title {
-        padding-left: 80px;
-        margin: 8px;
-      }
       #img-container {
         padding: 15px 0px 15px 5px;
       }
@@ -128,6 +124,32 @@
         margin: 30px auto;
         display: table;
       }
+      @media screen and (min-width: 769px) {
+        #web-title {
+          padding-left: 80px;
+          margin: 8px;
+        }
+        #pac-input {
+          left: 50px !important;
+        }
+      }
+
+      @media screen and (min-width: 480px) and (max-width: 768px) {
+        #web-title {
+          margin: 14px 0px 10px 45px;
+        }
+      }
+
+      @media screen and (max-width: 479px) {
+        #web-title {
+          font-size: 1.2rem;
+          margin: 18px 10px 10px 10px;
+        }
+
+        #pac-input {
+          width: 90%;
+        }
+      }
     </style>
 
   </head>
@@ -141,16 +163,16 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 col-7">
         <h1 id="web-title">台灣郵筒位置地圖</h1>
       </div>
-      <div class="col-md-1 offset-md-3" id="img-container">
+      <div class="col-lg-1 offset-lg-3 col-md-3 offset-md-1 col-3 " id="img-container">
         <img id="comment-img" class="img" src="image/chat.svg" alt="Comment Image" width="32px" height="32px">
         <a href="https://github.com/Neilxx/neilxx.github.io" target="_blank">
           <img class="img" src="image/GitHub-Mark-120px-plus.png" alt="Github Image" width="32px" height="32px">
         </a>
       </div>
-      <div class="col-md-2" id="fb-container">
+      <div class="col-md-2 col-2" id="fb-container">
         <div class="fb-like" data-href="https://neilxx.github.io/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
       </div>
     </div>
@@ -167,7 +189,9 @@
         var map = new google.maps.Map(document.getElementById('map'), {
           center: taiwan,
           zoom: 7,
-          mapTypeId: 'roadmap'
+          mapTypeId: 'roadmap',
+          mapTypeControl: false,
+          fullscreenControl: false
         });
 
         var image = {
