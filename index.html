@@ -62,24 +62,22 @@
     </div>
     <script>
       function initAutocomplete() {
-        var taiwan = {lat: 23.5, lng: 121};
-        var marker
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: taiwan,
+        const taiwanLatLng = { lat: 23.5, lng: 121 };
+        const map = new google.maps.Map(document.getElementById('map'), {
+          center: taiwanLatLng,
           zoom: 7,
           mapTypeId: 'roadmap',
           mapTypeControl: false,
-          fullscreenControl: false
+          fullscreenControl: false,
         });
 
-        var image = {
+        const image = {
           url: 'image/postbox.svg',
           scaledSize: new google.maps.Size(50, 50),
           origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(0, 32)
+          anchor: new google.maps.Point(0, 32),
         };
 
-        var post_markers = [];
         function bindInfoWindow(marker, map, infowindow, html) {
           marker.addListener('click', function() {
             infowindow.open(map, this);
@@ -87,24 +85,25 @@
           });
         }
 
-        for (i = 0; i < locations.length; i++) {
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i]["lat"], locations[i]["lng"]),
-            map: map,
+        const postBoxMarkers = [];
+        postBoxes.forEach(postBox => {
+          const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(postBox.lat, postBox.lng),
+            map,
             icon: image,
-            title: locations[i]["postbox_type"]
+            title: postBox.postBoxType.join(','),
           });
-          post_markers.push(marker);
-          var infowindow = new google.maps.InfoWindow();
-          var contentString =  '<h4>'+ locations[i]["postbox_type"] + '</h4><p>'+ locations[i]["full_address"] +'</p>';
+          postBoxMarkers.push(marker);
+          const infowindow = new google.maps.InfoWindow();
+          const contentString = `<h4>${postBox.postBoxType}</h4><p>${postBox.fullAddress}</p>`;
           bindInfoWindow(marker, map, infowindow, contentString);
-        }
+        });
 
-        var markerCluster = new MarkerClusterer(map, post_markers,
+        const markerCluster = new MarkerClusterer(map, postBoxMarkers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
+        const input = document.getElementById('pac-input');
+        const searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         map.addListener('bounds_changed', function() {
