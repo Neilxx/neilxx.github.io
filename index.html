@@ -110,35 +110,30 @@
           searchBox.setBounds(map.getBounds());
         });
 
-        var markers = [];
+        // 在搜尋框搜尋後...
+        let existMarkers = [];
         searchBox.addListener('places_changed', function() {
-          var places = searchBox.getPlaces();
+          const places = searchBox.getPlaces();
+          if (places.length == 0) return;
 
-          if (places.length == 0) {
-            return;
-          }
+          // 移除上次搜尋 marker
+          existMarkers.forEach(marker => marker.setMap(null));
+          existMarkers = [];
 
-          markers.forEach(function(marker) {
-            marker.setMap(null);
-          });
-
-          markers = [];
-
-          var bounds = new google.maps.LatLngBounds();
+          // Question: 什麼情境下會有多個 place?
+          const bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-            var icon = {
-              url: place.icon,
+            if (!place.geometry) return;
+
+            const icon = {
+              // url: place.icon, // use default icon instead
               size: new google.maps.Size(71, 71),
               origin: new google.maps.Point(0, 0),
               anchor: new google.maps.Point(17, 34),
               scaledSize: new google.maps.Size(25, 25)
             };
 
-            markers.push(new google.maps.Marker({
+            existMarkers.push(new google.maps.Marker({
               map: map,
               icon: icon,
               title: place.name,
@@ -153,22 +148,21 @@
           });
           map.fitBounds(bounds);
         });
+
+        // 瀏覽器自動定位
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
+                const pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
                 var marker = new google.maps.Marker({
                     position: pos,
-                    map: map
+                    map,
                 });
                 map.setZoom(17);
                 map.setCenter(pos);
             });
-        } else {
-            // Browser doesn't support Geolocation
-            alert("未允許或遭遇錯誤！");
         }
       }
 
