@@ -91,7 +91,7 @@
             position: new google.maps.LatLng(postBox.lat, postBox.lng),
             map,
             icon: image,
-            title: postBox.postBoxType.join(','),
+            title: postBox.postBoxType.join(', '),
           });
           postBoxMarkers.push(marker);
           const infowindow = new google.maps.InfoWindow();
