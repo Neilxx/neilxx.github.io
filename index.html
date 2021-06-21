@@ -11,14 +11,14 @@
       gtag('config', 'UA-132228705-1');
     </script>
 
-    <meta name="description" content="想知道郵筒在哪？ 在 Google Map 搜尋離你最近的郵筒位置！全台灣5635個郵筒的位置都在這">
-    <meta name="keywords" content="台灣郵筒位置地圖">
+    <meta name="description" content="台灣各縣市郵筒：台北市、新北市、桃園市、臺中市、臺南市、高雄市、新竹縣、苗栗縣、彰化縣、南投縣、雲林縣、嘉義縣、屏東縣、宜蘭縣、花蓮縣、臺東縣、澎湖縣、金門縣、連江縣、基隆市、新竹市、嘉義市">
+    <meta name="keywords" content="台灣郵筒位置地圖 | 在 Google Map 上搜尋離你最近的普通郵筒、限時郵筒 【每日即時更新】">
     <meta name="google-site-verification" content="v9MKqidJncD5bdENzNI0yEDZkwCh3VJr5BW0cTRcCgQ" />
     <meta name="msvalidate.01" content="A81048F864056777A8E0E640649B3ECC" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <meta property="og:image" content="http://neilxx.github.io/image/bigPostbox.png"/>
-    <title>台灣郵筒位置地圖</title>
+    <title>台灣郵筒位置地圖 | 在 Google Map 上搜尋離你最近的普通郵筒、限時郵筒！</title>
 
     <script type="text/javascript" src="js/jquery-1.11.3.min.js" ></script>
     <script type="text/javascript" src="js/jquery.easing.min.js" ></script>
@@ -44,22 +44,12 @@
       <div class="col-md-6 col-7">
         <h1 id="web-title">台灣郵筒位置地圖</h1>
       </div>
-      <div class="col-lg-1 offset-lg-3 col-md-3 offset-md-1 col-3 " id="img-container">
-        <img id="comment-img" class="img" src="image/chat.svg" alt="Comment Image" width="32px" height="32px">
-        <a href="https://github.com/Neilxx/neilxx.github.io" target="_blank">
-          <img class="img" src="image/GitHub-Mark-120px-plus.png" alt="Github Image" width="32px" height="32px">
-        </a>
-      </div>
-      <div class="col-md-2 col-2" id="fb-container">
+      <div class="offset-md-4 col-md-2 col-2" id="fb-container">
         <div class="fb-like" data-href="https://neilxx.github.io/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
       </div>
     </div>
-
     <input id="pac-input" class="controls" type="text" placeholder="搜尋地點">
     <div id="map"></div>
-    <div>
-      <div id="fb-comments" class="fb-comments" data-href="https://neilxx.github.io/" data-numposts="5"></div>
-    </div>
     <script>
       function initAutocomplete() {
         const taiwanLatLng = { lat: 23.5, lng: 121 };
