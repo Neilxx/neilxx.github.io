@@ -19,7 +19,7 @@
     <meta property="og:image" content="http://neilxx.github.io/image/bigPostbox.png"/>
     <title>台灣郵筒位置地圖 | 在 Google Map 上搜尋離你最近的普通郵筒、限時郵筒！</title>
 
-    <script type="text/javascript" src="js/post_boxes_with_latlng.js"></script>
+    <script type="text/javascript" src="js/post_boxes.js"></script>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" type="image/png" sizes="16x16" href="image/favicon-32x32.png">
   </head>
@@ -66,7 +66,7 @@
           });
           postBoxMarkers.push(marker);
           const infowindow = new google.maps.InfoWindow();
-          const contentString = `<h4>${postBox.postBoxType}</h4><p>${postBox.fullAddress}</p>`;
+          const contentString = `<h4>${postBox.postBoxType}</h4><p>${postBox.fullAddress}</p><p>${postBox.note}</p>`;
           bindInfoWindow(marker, map, infowindow, contentString);
         });
 
