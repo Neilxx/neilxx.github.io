@@ -78,20 +78,24 @@ html, body {
 #target {
   width: 345px;
 }
-#img-container {
-  padding: 15px 0px 15px 5px;
+
+h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.25rem;
 }
-#comment-img {
-  margin-right: 13px;
-  cursor: pointer;
+
+p {
+  font-size: 16px;
+  margin: 0 0 5px 0;
 }
-#fb-container {
-  padding-top: 18px;
+
+.link {
+  margin: 10px 30px;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: #0b0080;
 }
-#fb-comments {
-  margin: 30px auto;
-  display: table;
-}
+
 @media screen and (min-width: 769px) {
   #web-title {
     padding-left: 80px;
@@ -117,4 +121,11 @@ html, body {
   #pac-input {
     width: 90%;
   }
+  .link {
+    float: none;
+    display: inline-block;
+    margin: 10px 5px;
+    font-size: 0.8rem;
+  }
+
 }
